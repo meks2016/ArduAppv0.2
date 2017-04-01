@@ -6,18 +6,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
@@ -48,7 +51,10 @@ public class MainActivity extends AppCompatActivity {
         }
     };
     private UsbService usbService;
-    private TextView display;
+    private ListView listview;
+    static private List<String> list = new ArrayList<>();
+    static private ArrayAdapter<String> adapter;
+    static private int i = 1;
     private EditText editText;
     private MyHandler mHandler;
     private final ServiceConnection usbConnection = new ServiceConnection() {
@@ -70,8 +76,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mHandler = new MyHandler(this);
+        listview = (ListView) findViewById(R.id.listview);
 
-        display = (TextView) findViewById(R.id.textView1);
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
+        listview.setAdapter(adapter);
+
         editText = (EditText) findViewById(R.id.editText1);
         Button sendButton = (Button) findViewById(R.id.buttonSend);
         sendButton.setOnClickListener(new View.OnClickListener() {
@@ -142,7 +151,9 @@ public class MainActivity extends AppCompatActivity {
             switch (msg.what) {
                 case UsbService.MESSAGE_FROM_SERIAL_PORT:
                     String data = (String) msg.obj;
-                    mActivity.get().display.append(data);
+                    list.add(0, i + ". " + data);
+                    adapter.notifyDataSetChanged();
+                    i++;
                     break;
                 case UsbService.CTS_CHANGE:
                     Toast.makeText(mActivity.get(), "CTS_CHANGE",Toast.LENGTH_LONG).show();
