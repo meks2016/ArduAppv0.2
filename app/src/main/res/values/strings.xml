@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">ArduApp</string>
+    <string name="serial_port">Serial Port</string>
+</resources>
