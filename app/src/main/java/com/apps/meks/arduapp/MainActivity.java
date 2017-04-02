@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static java.lang.Double.parseDouble;
-
 public class MainActivity extends AppCompatActivity {
 
     /*
@@ -200,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
                     try{
 
                         rpm = Integer.parseInt(values[0]) * 10;
-                        voltage = parseDouble(values[1]) / 10;
+                        voltage = Double.parseDouble(values[1]) / 10;
                         temperature = Integer.parseInt(values[2]);
                         primerIgnition = Integer.parseInt(values[3]);
                         selectedCurve = Integer.parseInt(values[4].trim());
