@@ -23,16 +23,16 @@ import java.util.Map;
 
 public class UsbService extends Service {
 
-    public static final String ACTION_USB_READY = "com.felhr.connectivityservices.USB_READY";
+    public static final String ACTION_USB_READY = "com.apps.meks.arduapp.USB_READY";
     public static final String ACTION_USB_ATTACHED = "android.hardware.usb.action.USB_DEVICE_ATTACHED";
     public static final String ACTION_USB_DETACHED = "android.hardware.usb.action.USB_DEVICE_DETACHED";
-    public static final String ACTION_USB_NOT_SUPPORTED = "com.felhr.usbservice.USB_NOT_SUPPORTED";
-    public static final String ACTION_NO_USB = "com.felhr.usbservice.NO_USB";
-    public static final String ACTION_USB_PERMISSION_GRANTED = "com.felhr.usbservice.USB_PERMISSION_GRANTED";
-    public static final String ACTION_USB_PERMISSION_NOT_GRANTED = "com.felhr.usbservice.USB_PERMISSION_NOT_GRANTED";
-    public static final String ACTION_USB_DISCONNECTED = "com.felhr.usbservice.USB_DISCONNECTED";
-    public static final String ACTION_CDC_DRIVER_NOT_WORKING = "com.felhr.connectivityservices.ACTION_CDC_DRIVER_NOT_WORKING";
-    public static final String ACTION_USB_DEVICE_NOT_WORKING = "com.felhr.connectivityservices.ACTION_USB_DEVICE_NOT_WORKING";
+    public static final String ACTION_USB_NOT_SUPPORTED = "com.apps.meks.arduapp.usbservice.USB_NOT_SUPPORTED";
+    public static final String ACTION_NO_USB = "com.apps.meks.arduapp.usbservice.NO_USB";
+    public static final String ACTION_USB_PERMISSION_GRANTED = "com.apps.meks.arduapp.usbservice.USB_PERMISSION_GRANTED";
+    public static final String ACTION_USB_PERMISSION_NOT_GRANTED = "com.apps.meks.arduapp.usbservice.USB_PERMISSION_NOT_GRANTED";
+    public static final String ACTION_USB_DISCONNECTED = "com.apps.meks.arduapp.usbservice.USB_DISCONNECTED";
+    public static final String ACTION_CDC_DRIVER_NOT_WORKING = "com.apps.meks.arduapp.ACTION_CDC_DRIVER_NOT_WORKING";
+    public static final String ACTION_USB_DEVICE_NOT_WORKING = "com.apps.meks.arduapp.ACTION_USB_DEVICE_NOT_WORKING";
     public static final int MESSAGE_FROM_SERIAL_PORT = 0;
     public static final int CTS_CHANGE = 1;
     public static final int DSR_CHANGE = 2;
