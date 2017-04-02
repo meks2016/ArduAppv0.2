@@ -57,6 +57,14 @@ public class MainActivity extends AppCompatActivity {
     static private int i = 1;
     private EditText editText;
     private MyHandler mHandler;
+
+
+    private int rpm = 0; //revolution per minute = Drehzahl
+    private double voltage = 0;
+    private double temperature = 0;
+    private int primerIgnition = 0;
+    private int selectedCurve = 0;
+
     private final ServiceConnection usbConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName arg0, IBinder arg1) {
@@ -161,6 +169,41 @@ public class MainActivity extends AppCompatActivity {
                 case UsbService.DSR_CHANGE:
                     Toast.makeText(mActivity.get(), "DSR_CHANGE",Toast.LENGTH_LONG).show();
                     break;
+            }
+        }
+
+
+        public void parseData(String data){
+            /**
+            * split data into the individual values
+             * data = A150,275,85,21,1
+             * A = Anzeige
+             * 150 = Drehzahl
+             * 275 = Spannung
+             * 85 = Temperatur
+             * 21 = Vorzündung
+             * 1 = angewählte Kurve
+            **/
+
+
+            //TODO: diese logik muss noch überarbeitet werden
+
+            String[] values = data.split(",");
+            if(values.length == 5){
+
+                //split the first valaue - to get the input letter
+                String [] input = values[0].split(",");
+                if(input.length==2){
+
+                    switch (input[0]){
+                        case "A":
+                            break;
+
+                        case "V":
+                            break;
+                    }
+
+                }
             }
         }
     }
