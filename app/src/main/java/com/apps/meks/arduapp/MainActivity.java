@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import static java.lang.Double.parseDouble;
+
 public class MainActivity extends AppCompatActivity {
 
     /*
@@ -61,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static int rpm = 0; //revolution per minute = Drehzahl
     private static double voltage = 0;
-    private static double temperature = 0;
+    private static int temperature = 0;
     private static int primerIgnition = 0; //Vorzündung
     private static int selectedCurve = 0;
 
@@ -187,43 +189,32 @@ public class MainActivity extends AppCompatActivity {
             **/
 
 
-            //TODO: diese logik muss noch überarbeitet werden
-
-            list.add(0,"vor dem if: ");
-            adapter.notifyDataSetChanged();
+            //TODO: diese LOGIC muss noch überarbeitet werden !!!
 
             //A - ANZEIGE
             if(data.startsWith("A") ){
-                list.add(0,"im ersten IF : ");
-                adapter.notifyDataSetChanged();
                 String[] values = data.substring(1).split(",");
                 if(values.length == 5){
-                    list.add(0,"im zweiten if: ");
-                    adapter.notifyDataSetChanged();
 
                     //split the first valaue - to get the input letter
                     try{
 
-                        list.add(0,"im try: " + values[0]);
-                        adapter.notifyDataSetChanged();
-
                         rpm = Integer.parseInt(values[0]) * 10;
-                        voltage = Double.parseDouble(values[1]) / 10;
-                        temperature = Double.parseDouble(values[2]);
+                        voltage = parseDouble(values[1]) / 10;
+                        temperature = Integer.parseInt(values[2]);
                         primerIgnition = Integer.parseInt(values[3]);
-                        selectedCurve = Integer.parseInt(values[4]);
+                        selectedCurve = Integer.parseInt(values[4].trim());
 
-                        list.add(0,"Drehzahl: " + String.valueOf(rpm) ); //+ "\nSpannung: " + voltage + "\nTemperatur: " + temperature + "\nVorzündung: " + primerIgnition + "\nAngewählte Kurve: " + selectedCurve );
+                        list.add(0,"Drehzahl: "         + rpm +
+                                "\nSpannung: "          + voltage +
+                                "\nTemperatur: "        + temperature +
+                                "\nVorzündung: "        + primerIgnition +
+                                "\nAngewählte Kurve: "  + selectedCurve );
                         adapter.notifyDataSetChanged();
                         i++;
-                    }catch (Exception e){
-                        list.add(0,"in der exception: " + e.getStackTrace());
-                        adapter.notifyDataSetChanged();
 
-                    }
+                    }catch (Exception e){ }
                 }
-
-            //
             }
 
             //k - Kurve 1
