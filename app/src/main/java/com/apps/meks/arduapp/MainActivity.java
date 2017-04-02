@@ -59,11 +59,11 @@ public class MainActivity extends AppCompatActivity {
     private MyHandler mHandler;
 
 
-    private int rpm = 0; //revolution per minute = Drehzahl
-    private double voltage = 0;
-    private double temperature = 0;
-    private int primerIgnition = 0;
-    private int selectedCurve = 0;
+    private static int rpm = 0; //revolution per minute = Drehzahl
+    private static double voltage = 0;
+    private static double temperature = 0;
+    private static int primerIgnition = 0; //Vorzündung
+    private static int selectedCurve = 0;
 
     private final ServiceConnection usbConnection = new ServiceConnection() {
         @Override
@@ -162,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
                     list.add(0, i + ". " + data);
                     adapter.notifyDataSetChanged();
                     i++;
+                    parseData(data);
                     break;
                 case UsbService.CTS_CHANGE:
                     Toast.makeText(mActivity.get(), "CTS_CHANGE",Toast.LENGTH_LONG).show();
@@ -188,23 +189,54 @@ public class MainActivity extends AppCompatActivity {
 
             //TODO: diese logik muss noch überarbeitet werden
 
-            String[] values = data.split(",");
-            if(values.length == 5){
+            list.add(0,"vor dem if: ");
+            adapter.notifyDataSetChanged();
 
-                //split the first valaue - to get the input letter
-                String [] input = values[0].split(",");
-                if(input.length==2){
+            //A - ANZEIGE
+            if(data.startsWith("A") ){
+                list.add(0,"im ersten IF : ");
+                adapter.notifyDataSetChanged();
+                String[] values = data.substring(1).split(",");
+                if(values.length == 5){
+                    list.add(0,"im zweiten if: ");
+                    adapter.notifyDataSetChanged();
 
-                    switch (input[0]){
-                        case "A":
-                            break;
+                    //split the first valaue - to get the input letter
+                    try{
 
-                        case "V":
-                            break;
+                        list.add(0,"im try: " + values[0]);
+                        adapter.notifyDataSetChanged();
+
+                        rpm = Integer.parseInt(values[0]) * 10;
+                        voltage = Double.parseDouble(values[1]) / 10;
+                        temperature = Double.parseDouble(values[2]);
+                        primerIgnition = Integer.parseInt(values[3]);
+                        selectedCurve = Integer.parseInt(values[4]);
+
+                        list.add(0,"Drehzahl: " + String.valueOf(rpm) ); //+ "\nSpannung: " + voltage + "\nTemperatur: " + temperature + "\nVorzündung: " + primerIgnition + "\nAngewählte Kurve: " + selectedCurve );
+                        adapter.notifyDataSetChanged();
+                        i++;
+                    }catch (Exception e){
+                        list.add(0,"in der exception: " + e.getStackTrace());
+                        adapter.notifyDataSetChanged();
+
                     }
-
                 }
+
+            //
             }
+
+            //k - Kurve 1
+
+            //l - Kurve 2
+
+            //V - Version
+
+            //d - dwell us
+
+            //p - anzeige alle parameter permanent
+
+            //7 - Read A0
         }
     }
 }
