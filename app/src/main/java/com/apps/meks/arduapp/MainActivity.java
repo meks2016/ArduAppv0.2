@@ -39,6 +39,11 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case UsbService.ACTION_USB_DISCONNECTED: // USB DISCONNECTED
                     Toast.makeText(context, "USB disconnected", Toast.LENGTH_SHORT).show();
+                    rpmTextView.setText("-");
+                    voltageTextView.setText("- V");
+                    temperatureTextView.setText("- °C");
+                    primerIgnitionTextView.setText("- °C");
+                    selectedCurveTextView.setText("-");
                     break;
                 case UsbService.ACTION_USB_NOT_SUPPORTED: // USB NOT SUPPORTED
                     Toast.makeText(context, "USB device not supported", Toast.LENGTH_SHORT).show();
@@ -56,11 +61,15 @@ public class MainActivity extends AppCompatActivity {
     private static TextView temperatureTextView;
     private static TextView rpmTextView;
 
+    private static String inputCommand = "A";
+    private static WriteDataThread thread;
+
     private static int rpm = 0; //revolution per minute = Drehzahl
     private static double voltage = 0;
     private static int temperature = 0;
     private static int primerIgnition = 0; //Vorzündung
     private static int selectedCurve = 0;
+
 
     private final ServiceConnection usbConnection = new ServiceConnection() {
         @Override
@@ -83,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         //Remove notification bar
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_main);
 
 
@@ -93,40 +103,49 @@ public class MainActivity extends AppCompatActivity {
         temperatureTextView = (TextView) findViewById(R.id.temperature);
         rpmTextView = (TextView) findViewById(R.id.rpm);
 
+
         mHandler = new MyHandler(this);
-//          Send button
 
-//        editText = (EditText) findViewById(R.id.editText1);
-//        Button sendButton = (Button) findViewById(R.id.buttonSend);
-//        sendButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (!editText.getText().toString().equals("")) {
-//                    String data = editText.getText().toString();
-//                    if (usbService != null) { // if UsbService was correctly binded, Send data
-//                        usbService.write(data.getBytes());
-//                    }
-//                }
-//            }
-//        });
-
-        String inputCommand = "A";
-                try{
-            while (true){
-                Thread.sleep(1000);
-                usbService.write(inputCommand.getBytes());
-            }
-
-        }catch(InterruptedException e){ }
-
-
+        thread = new WriteDataThread();
+        thread.start();
     }
+
+    public class WriteDataThread implements Runnable {
+
+        Thread backgroundThread;
+
+        public void start() {
+            if (backgroundThread == null) {
+                backgroundThread = new Thread(this);
+                backgroundThread.start();
+            }
+        }
+
+        public void stop() {
+            if (backgroundThread != null) {
+                backgroundThread.interrupt();
+            }
+        }
+
+        public void run() {
+            while (!backgroundThread.interrupted()) {
+                try {
+                    Thread.sleep(1000);
+                    if (usbService != null) { // if UsbService was correctly binded, Send data
+                        usbService.write(inputCommand.getBytes());
+                    }
+                } catch (InterruptedException e) {}
+            }
+        }
+    }
+
 
     @Override
     public void onResume() {
         super.onResume();
         setFilters();  // Start listening notifications from UsbService
         startService(UsbService.class, usbConnection, null); // Start UsbService(if it was not started before) and Bind it
+        thread.start();
     }
 
     @Override
@@ -134,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         unregisterReceiver(mUsbReceiver);
         unbindService(usbConnection);
+        thread.stop();
     }
 
     private void startService(Class<?> service, ServiceConnection serviceConnection, Bundle extras) {
@@ -204,29 +224,27 @@ public class MainActivity extends AppCompatActivity {
 
 
             //TODO: diese LOGIC muss noch überarbeitet werden !!!
-
             //A - ANZEIGE
             if(data.startsWith("A") ){
+
                 String[] values = data.substring(1).split(",");
                 if(values.length == 5){
-
                     //split the first valaue - to get the input letter
                     try{
-
                         rpm = Integer.parseInt(values[0]) * 10;
                         voltage = Double.parseDouble(values[1]) / 10;
-                        temperature = Integer.parseInt(values[2]);
+                        temperature = Integer.parseInt(values[2].trim());
                         primerIgnition = Integer.parseInt(values[3]);
                         selectedCurve = Integer.parseInt(values[4].trim());
 
                         //Set UI Elements
-                        rpmTextView.setText(rpm);
+                        rpmTextView.setText(String.valueOf(rpm));
                         voltageTextView.setText(String.valueOf(voltage) + " V");
                         temperatureTextView.setText(String.valueOf(temperature) + " °C");
                         primerIgnitionTextView.setText(String.valueOf(primerIgnition) + " °C");
-                        selectedCurveTextView.setText(selectedCurve);
+                        selectedCurveTextView.setText(String.valueOf(selectedCurve));
 
-                    }catch (Exception e){ }
+                    }catch (Exception e){}
                 }
             }
 

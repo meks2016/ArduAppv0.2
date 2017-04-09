@@ -8,22 +8,24 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.apps.meks.arduapp.MainActivity"
     android:orientation="horizontal"
-    android:background="@color/colorBlack">
+    android:background="@color/colorOliveGreen">
 
     <TextView
         android:id="@+id/rpm"
-        android:layout_width="wrap_content"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="95dp"
-        android:textSize="60sp"/>
+        android:layout_marginTop="130dp"
+        android:textSize="60sp"
+        android:textColor="@color/colorWhite"
+        android:text="-"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginStart="270dp"
-        android:layout_marginLeft="270dp"
-        android:layout_marginTop="40dp">
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="00dp"
+        android:layout_marginTop="70dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -43,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
                 android:layout_marginLeft="25dp"
-                android:text="1"
+                android:text="-"
                 android:textSize="35sp"
                 android:textColor="@color/colorWhite"/>
 
@@ -53,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="35dp"
                 android:layout_marginLeft="35dp"
-                android:text="21 °C"
+                android:text="- °C"
                 android:textSize="25sp"
                 android:textColor="@color/colorWhite"/>
 
@@ -77,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
                 android:layout_marginLeft="30dp"
-                android:text="24,5 V"
+                android:text="- V"
                 android:textSize="35sp"
                 android:textColor="@color/colorWhite"/>
 
@@ -101,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginLeft="15dp"
-                android:text="85 °C"
+                android:text="- °C"
                 android:textSize="35sp"
                 android:textColor="@color/colorWhite"/>
 
