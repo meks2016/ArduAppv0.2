@@ -8,24 +8,20 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.apps.meks.arduapp.MainActivity"
     android:orientation="horizontal"
-    android:background="@color/colorOliveGreen">
+    android:background="@color/colorOliveGreen"
+    android:weightSum="100">
 
-    <TextView
-        android:id="@+id/rpm"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="130dp"
-        android:textSize="60sp"
-        android:textColor="@color/colorWhite"
-        android:text="-"/>
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chart"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="50"/>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_marginStart="0dp"
-        android:layout_marginLeft="00dp"
-        android:layout_marginTop="70dp">
+        android:layout_weight="50">
 
         <LinearLayout
             android:layout_width="wrap_content"
