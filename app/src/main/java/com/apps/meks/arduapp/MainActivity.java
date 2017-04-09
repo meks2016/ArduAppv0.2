@@ -11,16 +11,12 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
@@ -51,13 +47,14 @@ public class MainActivity extends AppCompatActivity {
         }
     };
     private UsbService usbService;
-    private ListView listview;
-    static private List<String> list = new ArrayList<>();
-    static private ArrayAdapter<String> adapter;
-    static private int i = 1;
-    private EditText editText;
     private MyHandler mHandler;
 
+    //UI Elemente
+    private static TextView selectedCurveTextView;
+    private static TextView primerIgnitionTextView;
+    private static TextView voltageTextView;
+    private static TextView temperatureTextView;
+    private static TextView rpmTextView;
 
     private static int rpm = 0; //revolution per minute = Drehzahl
     private static double voltage = 0;
@@ -81,27 +78,48 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Remove title bar
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //Remove notification bar
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
+
+        //UI Elemente
+        selectedCurveTextView = (TextView) findViewById(R.id.selectedCurve);
+        primerIgnitionTextView = (TextView) findViewById(R.id.primerIgnition);
+        voltageTextView = (TextView) findViewById(R.id.voltage);
+        temperatureTextView = (TextView) findViewById(R.id.temperature);
+        rpmTextView = (TextView) findViewById(R.id.rpm);
+
         mHandler = new MyHandler(this);
-        listview = (ListView) findViewById(R.id.listview);
+//          Send button
 
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
-        listview.setAdapter(adapter);
+//        editText = (EditText) findViewById(R.id.editText1);
+//        Button sendButton = (Button) findViewById(R.id.buttonSend);
+//        sendButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (!editText.getText().toString().equals("")) {
+//                    String data = editText.getText().toString();
+//                    if (usbService != null) { // if UsbService was correctly binded, Send data
+//                        usbService.write(data.getBytes());
+//                    }
+//                }
+//            }
+//        });
 
-        editText = (EditText) findViewById(R.id.editText1);
-        Button sendButton = (Button) findViewById(R.id.buttonSend);
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!editText.getText().toString().equals("")) {
-                    String data = editText.getText().toString();
-                    if (usbService != null) { // if UsbService was correctly binded, Send data
-                        usbService.write(data.getBytes());
-                    }
-                }
+        String inputCommand = "A";
+                try{
+            while (true){
+                Thread.sleep(1000);
+                usbService.write(inputCommand.getBytes());
             }
-        });
+
+        }catch(InterruptedException e){ }
+
+
     }
 
     @Override
@@ -159,9 +177,7 @@ public class MainActivity extends AppCompatActivity {
             switch (msg.what) {
                 case UsbService.MESSAGE_FROM_SERIAL_PORT:
                     String data = (String) msg.obj;
-                    list.add(0, i + ". " + data);
-                    adapter.notifyDataSetChanged();
-                    i++;
+
                     parseData(data);
                     break;
                 case UsbService.CTS_CHANGE:
@@ -203,13 +219,12 @@ public class MainActivity extends AppCompatActivity {
                         primerIgnition = Integer.parseInt(values[3]);
                         selectedCurve = Integer.parseInt(values[4].trim());
 
-                        list.add(0,"Drehzahl: "         + rpm +
-                                "\nSpannung: "          + voltage +
-                                "\nTemperatur: "        + temperature +
-                                "\nVorzündung: "        + primerIgnition +
-                                "\nAngewählte Kurve: "  + selectedCurve );
-                        adapter.notifyDataSetChanged();
-                        i++;
+                        //Set UI Elements
+                        rpmTextView.setText(rpm);
+                        voltageTextView.setText(String.valueOf(voltage) + " V");
+                        temperatureTextView.setText(String.valueOf(temperature) + " °C");
+                        primerIgnitionTextView.setText(String.valueOf(primerIgnition) + " °C");
+                        selectedCurveTextView.setText(selectedCurve);
 
                     }catch (Exception e){ }
                 }
@@ -228,4 +243,5 @@ public class MainActivity extends AppCompatActivity {
             //7 - Read A0
         }
     }
+
 }
