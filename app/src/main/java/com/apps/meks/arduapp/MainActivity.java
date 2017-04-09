@@ -298,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
                         voltage = Double.parseDouble(values[1]) / 10;
                         temperature = Integer.parseInt(values[2]);
                         primerIgnition = Integer.parseInt(values[3]);
-                        selectedCurve = Integer.parseInt(values[4]);
+                        selectedCurve = Integer.parseInt(values[4].trim());
 
 
                         LineData dataForChart = rpmChart.getData();
