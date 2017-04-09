@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">ArduApp</string>
     <string name="serial_port">Serial Port</string>
+    <string name="selectedCurve">Kurve</string>
+    <string name="voltage">Spannung</string>
+    <string name="temperature">Temperatur</string>
 </resources>
