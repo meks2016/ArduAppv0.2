@@ -31,9 +31,7 @@ import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
-    /*
-         * Notifications from UsbService will be received here.
-         */
+
     private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
